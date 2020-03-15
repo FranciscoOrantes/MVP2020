@@ -20,7 +20,7 @@ import cz.msebera.android.httpclient.Header;
 public class Login implements LoginPresentador {
 LoginVista vistaLogin;
 AsyncHttpClient client = new AsyncHttpClient();
-String ruta = "http://85343b4e.ngrok.io";
+
 String token;
     public Login(LoginVista vistaLogin){
         this.vistaLogin =vistaLogin;
@@ -29,11 +29,12 @@ String token;
 
     @Override
     public void inicioDeSesion(String usuario, String password) {
-
+        Conexion conexion = new Conexion();
         RequestParams params = new RequestParams();
+        System.out.println(conexion.getRuta());
         params.put("username",usuario);
         params.put("password",password);
-        client.post(ruta + "/login", params, new AsyncHttpResponseHandler() {
+        client.post(conexion.getRuta() + "/login", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
 

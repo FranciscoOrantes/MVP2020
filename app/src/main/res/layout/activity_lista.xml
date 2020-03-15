@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/contenedor"
     tools:context=".Actividad.ListaActivity">
 
     <ScrollView
@@ -27,8 +26,8 @@
 
 
             </TableLayout>
+
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
-    <include layout="@layout/segundousuario"></include>
 
 </android.support.constraint.ConstraintLayout>

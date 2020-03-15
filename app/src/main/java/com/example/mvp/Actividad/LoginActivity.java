@@ -48,6 +48,7 @@ private ProgressDialog progressDialog;
         progressDialog.dismiss();
         Intent intent = new Intent(LoginActivity.this, ListaActivity.class);
         intent.putExtra("token",token);
+
         Toast.makeText(getApplicationContext(),"Inicio de sesion exitoso",Toast.LENGTH_LONG).show();
         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
     }
@@ -62,7 +63,7 @@ private ProgressDialog progressDialog;
     @Override
     protected void onResume() {
         super.onResume();
-        txtUsuario.setText(" ");
-        txtPassword.setText(" ");
+        txtUsuario.setText("");
+        txtPassword.setText("");
     }
 }
