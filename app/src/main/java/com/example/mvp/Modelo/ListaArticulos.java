@@ -14,15 +14,14 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
-public class ListaAlumnos implements ListaPresentador {
+public class ListaArticulos implements ListaPresentador {
     ListaVista vistaLista;
     AsyncHttpClient client = new AsyncHttpClient();
-    String token;
     private ArrayList nombres = new ArrayList();
     private ArrayList ids = new ArrayList();
     private ArrayList precios = new ArrayList();
     @Override
-    public void metodoGetAlumnos(String token) {
+    public void metodoGetArticulos(String token) {
         Conexion conexion = new Conexion();
         client.addHeader("Authorization","Token"+" "+ token);
         client.get(conexion.getRuta()+"/producto/productosEmpresa/", new AsyncHttpResponseHandler(){
@@ -45,7 +44,7 @@ public class ListaAlumnos implements ListaPresentador {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                vistaLista.mostrarAlumnos(ids,nombres,precios);
+                vistaLista.mostrarArticulos(ids,nombres,precios);
             }
 
             @Override
@@ -54,8 +53,10 @@ public class ListaAlumnos implements ListaPresentador {
             }
         });
     }
-    public ListaAlumnos(ListaVista vistaLista){
+    public ListaArticulos(ListaVista vistaLista){
         this.vistaLista =vistaLista;
 
     }
+
+
 }

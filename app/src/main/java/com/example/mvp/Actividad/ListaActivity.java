@@ -1,5 +1,6 @@
 package com.example.mvp.Actividad;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -9,10 +10,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.example.mvp.Modelo.ListaAlumnos;
-import com.example.mvp.Modelo.Login;
+import com.example.mvp.Modelo.ListaArticulos;
 import com.example.mvp.Presentador.ListaPresentador;
-import com.example.mvp.Presentador.LoginPresentador;
 import com.example.mvp.R;
 import com.example.mvp.Vista.ListaVista;
 import com.loopj.android.http.AsyncHttpClient;
@@ -22,7 +21,6 @@ import java.util.ArrayList;
 public class ListaActivity extends AppCompatActivity implements ListaVista {
     String token;
     ListaPresentador lista;
-    private String usuario;
     private String[]columnasUsuario1 = {"id","nombre","Detalles"};
     private String[]columnasUsuario2 = {"id","nombre","precio","Detalles"};
     TableRow idTR;
@@ -32,9 +30,6 @@ public class ListaActivity extends AppCompatActivity implements ListaVista {
     TableLayout tabla;
     TableRow fila;
     TableRow fila2;
-    ArrayList ids;
-    ArrayList nombres;
-    ArrayList precios;
     TextView columna;
     TextView txtNombre;
     TextView txtPrecio;
@@ -57,10 +52,10 @@ public class ListaActivity extends AppCompatActivity implements ListaVista {
 
         nombreProductoTR = new TableRow(getApplicationContext());
         precioTR = new TableRow(getApplicationContext());
-        lista = new ListaAlumnos(ListaActivity.this);
+        lista = new ListaArticulos(ListaActivity.this);
         token= getIntent().getExtras().getString("token");
 
-        lista.metodoGetAlumnos(token);
+        lista.metodoGetArticulos(token);
         inicializarDatos(token);
     }
     public void inicializarDatos(String token){
@@ -91,7 +86,7 @@ public class ListaActivity extends AppCompatActivity implements ListaVista {
     }
 
     @Override
-    public void mostrarAlumnos(ArrayList ids, ArrayList nombres, ArrayList precios) {
+    public void mostrarArticulos(final ArrayList ids, ArrayList nombres, ArrayList precios) {
         if(token.equals("75b998251508230f843d33e716c7d68f401a86ee")){
             for(int i = 0;i<ids.size();i++) {
                 final int posicion = i;
@@ -129,7 +124,7 @@ public class ListaActivity extends AppCompatActivity implements ListaVista {
                                 @Override
                                 public void onClick(View view) {
                                     System.out.println("holi");
-                                    //detalles(Integer.parseInt(ids.get(posicion).toString()));
+                                    detalles(Integer.parseInt(ids.get(posicion).toString()));
                                 }
                             });
                             tableRow.addView(btnDetalles);
@@ -184,7 +179,7 @@ public class ListaActivity extends AppCompatActivity implements ListaVista {
                                 @Override
                                 public void onClick(View view) {
                                     System.out.println("holi");
-                                    //detalles(Integer.parseInt(ids.get(posicion).toString()));
+                                    detalles(Integer.parseInt(ids.get(posicion).toString()));
                                 }
                             });
                             tableRow.addView(btnDetalles);
@@ -196,5 +191,13 @@ public class ListaActivity extends AppCompatActivity implements ListaVista {
 
             }
         }
+    }
+    public void detalles(int posicion){
+        Bundle bundle = new Bundle();
+        Intent intent = new Intent(ListaActivity.this,DetallesActivity.class);
+        bundle.putString("token", token);
+        bundle.putInt("posicion", posicion);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }
