@@ -41,7 +41,9 @@ String token;
                 try {
                     JSONObject json = new JSONObject(new String(responseBody));
                     token = json.getString("token");
+                    System.out.println("ESTE ES EL TOKEN EN EL LOGIN " + token );
                     vistaLogin.inicioSesion(token);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

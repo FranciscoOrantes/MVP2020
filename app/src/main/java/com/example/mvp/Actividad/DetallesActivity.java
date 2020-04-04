@@ -1,6 +1,7 @@
 package com.example.mvp.Actividad;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +15,8 @@ import com.example.mvp.Presentador.ListaPresentador;
 import com.example.mvp.R;
 import com.example.mvp.Vista.DetallesVista;
 import com.loopj.android.http.RequestParams;
+
+import java.util.List;
 
 public class DetallesActivity extends AppCompatActivity implements DetallesVista {
     String token,titulo;
@@ -55,7 +58,7 @@ public class DetallesActivity extends AppCompatActivity implements DetallesVista
                 String txtProgress = null;
                 RequestParams params = new RequestParams();
                 params.put("nombreProducto",txtNombre.getText().toString());
-                params.put("distribuidora",0);
+                params.put("distribuidora",3);
                 params.put("descripcion",txtDescripcion.getText().toString());
                 params.put("tipoProducto",txtTipo.getText().toString());
                 params.put("precio",txtPrecio.getText().toString());
@@ -65,11 +68,15 @@ public class DetallesActivity extends AppCompatActivity implements DetallesVista
 
                     progressDialog = ProgressDialog.show(DetallesActivity.this, txtProgress, "Por favor espere", true, true);
                     detalles.updateArticulo(token,id,params);
+
                 }else{
-
+                    txtProgress="Registrando";
+                    progressDialog = ProgressDialog.show(DetallesActivity.this, txtProgress, "Por favor espere", true, true);
                     detalles.metodoAgregarArticulo(token,params);
-
                 }
+                Intent intent = new Intent(DetallesActivity.this, ListaActivity.class);
+                intent.putExtra("token",token);
+                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             }
         });
 

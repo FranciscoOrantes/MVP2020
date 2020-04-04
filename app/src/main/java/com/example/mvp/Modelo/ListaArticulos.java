@@ -57,6 +57,19 @@ public class ListaArticulos implements ListaPresentador {
 
     @Override
     public void metodoEliminarArticulo(String token, int id) {
+        Conexion conexion = new Conexion();
+        client.addHeader("Authorization","Token"+" "+ token);
+        client.delete(conexion.getRuta() + "/producto/productosEmpresa/action/" + id, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                vistaLista.eliminadoExito();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                vistaLista.error();
+            }
+        });
 
     }
 

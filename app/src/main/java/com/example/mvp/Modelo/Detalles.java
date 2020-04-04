@@ -75,6 +75,7 @@ public Detalles(DetallesVista vistaDetalles){
     @Override
     public void metodoAgregarArticulo(String token, RequestParams parametros) {
         Conexion conexion = new Conexion();
+        System.out.println("ESTE ES EL TOKEN EN EL POST " + token );
         client.addHeader("Authorization","Token"+" "+ token);
         client.post(conexion.getRuta() + "/producto/productosEmpresa/", parametros, new AsyncHttpResponseHandler() {
             @Override
@@ -84,7 +85,8 @@ public Detalles(DetallesVista vistaDetalles){
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                    vistaDetalles.error();
+                System.out.println();
+                vistaDetalles.error();
             }
         });
     }

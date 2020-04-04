@@ -1,5 +1,8 @@
 package com.example.mvp.Actividad;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mvp.Modelo.ListaArticulos;
 import com.example.mvp.Presentador.ListaPresentador;
@@ -23,24 +27,23 @@ import com.example.mvp.Vista.ListaVista;
 import com.loopj.android.http.AsyncHttpClient;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ListaActivity extends AppCompatActivity implements ListaVista {
     String token;
     ListaPresentador lista;
     private String[]columnasUsuario1 = {"id","nombre","Detalles"};
     private String[]columnasUsuario2 = {"id","nombre","precio","Detalles"};
-    TableRow idTR;
-    TableRow nombreProductoTR;
-    TableRow precioTR;
     AsyncHttpClient client;
     TableLayout tabla;
     TableRow fila;
-    TableRow fila2;
+
     TextView columna;
     ImageView btnRegistrarArt;
     ArrayAdapter  adapter;
     ListView listaArticulos;
     String titulo;
+    ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,7 +110,43 @@ public class ListaActivity extends AppCompatActivity implements ListaVista {
 
             }
         });
+        listaArticulos.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int i, long l) {
+                AlertDialog.Builder dialogo = new AlertDialog.Builder(ListaActivity.this);
+                dialogo.setTitle("Advertencia");
+                dialogo.setMessage("¿ Seguro que desea borrar el articulo ?");
+                dialogo.setCancelable(false);
+                dialogo.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogo1, int id) {
+                        progressDialog = ProgressDialog.show(ListaActivity.this, "Eliminando", "Por favor espere", true, true);
+                        lista.metodoEliminarArticulo(token,(Integer)ids.get(i));
+                        lista.metodoGetArticulos(token);
+                    }
+                });
+                dialogo.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogo1, int id) {
+                        dialogo1.dismiss();
+                    }
+                });
+                dialogo.show();
+                return true;
+            }
+        });
     }
+
+    @Override
+    public void eliminadoExito() {
+        progressDialog.dismiss();
+        Toast.makeText(getApplicationContext(),"Se ha eliminado con éxito",Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void error() {
+        progressDialog.dismiss();
+        Toast.makeText(getApplicationContext(),"Ha ocurrido un error",Toast.LENGTH_LONG).show();
+    }
+
     public void detalles(int posicion,String titulo){
         Bundle bundle = new Bundle();
         Intent intent = new Intent(ListaActivity.this,DetallesActivity.class);
