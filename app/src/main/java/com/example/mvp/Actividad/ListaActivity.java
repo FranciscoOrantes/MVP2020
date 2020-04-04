@@ -5,7 +5,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -31,32 +37,36 @@ public class ListaActivity extends AppCompatActivity implements ListaVista {
     TableRow fila;
     TableRow fila2;
     TextView columna;
-    TextView txtNombre;
-    TextView txtPrecio;
-    TextView txtId;
-    Button btnDetalles;
+    ImageView btnRegistrarArt;
+    ArrayAdapter  adapter;
+    ListView listaArticulos;
+    String titulo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista);
-        tabla = findViewById(R.id.lista);
+        listaArticulos = findViewById(R.id.lista);
         client = new AsyncHttpClient();
-
-
-        fila = new TableRow(getApplicationContext());
-        fila2 = new TableRow(getApplicationContext());
+        btnRegistrarArt = findViewById(R.id.btnArt);
 
 
 
-        idTR = new TableRow(getApplicationContext());
 
-        nombreProductoTR = new TableRow(getApplicationContext());
-        precioTR = new TableRow(getApplicationContext());
+
+
+
         lista = new ListaArticulos(ListaActivity.this);
         token= getIntent().getExtras().getString("token");
 
         lista.metodoGetArticulos(token);
-        inicializarDatos(token);
+        btnRegistrarArt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                titulo = "Registrar";
+                vistaRegistro(titulo);
+            }
+        });
+        //inicializarDatos(token);
     }
     public void inicializarDatos(String token){
         if(token.equals("75b998251508230f843d33e716c7d68f401a86ee")){
@@ -87,117 +97,33 @@ public class ListaActivity extends AppCompatActivity implements ListaVista {
 
     @Override
     public void mostrarArticulos(final ArrayList ids, ArrayList nombres, ArrayList precios) {
-        if(token.equals("75b998251508230f843d33e716c7d68f401a86ee")){
-            for(int i = 0;i<ids.size();i++) {
-                final int posicion = i;
-                TableRow tableRow = new TableRow(getApplicationContext());
-                tabla.addView(tableRow);
-                for (int j = 0; j < columnasUsuario1.length; j++) {
-
-                    txtId= new TextView(getApplicationContext());
-                    txtNombre= new TextView(getApplicationContext());
-
-
-
-                    txtNombre.setGravity(Gravity.CENTER_VERTICAL);
-                    txtNombre.setPadding(15, 15, 15, 15);
-
-                    switch (j) {
-                        case 0:
-                            txtId.setText(ids.get(i).toString());
-                            System.out.println(ids.get(i));
-                            tableRow.addView(txtId);
-                            break;
-                        case 1:
-                            txtNombre.setText(nombres.get(i).toString());
-                            System.out.println(nombres.get(i));
-                            tableRow.addView(txtNombre);
-                            break;
-                        case 2:
-                            btnDetalles = new Button(getApplicationContext());
-                            btnDetalles.setText("Ver detalles");
-                            btnDetalles.setGravity(Gravity.CENTER_VERTICAL);
-
-                            btnDetalles.setCompoundDrawablesWithIntrinsicBounds(R.drawable.pen,0,0,0);
-                            btnDetalles.setPadding(15, 15, 15, 15);
-                            btnDetalles.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    System.out.println("holi");
-                                    detalles(Integer.parseInt(ids.get(posicion).toString()));
-                                }
-                            });
-                            tableRow.addView(btnDetalles);
-
-                            break;
-
-                    }
-                }
+        adapter = new ArrayAdapter(getApplicationContext(),android.R.layout.simple_list_item_1,nombres);
+        listaArticulos.setAdapter( adapter);
+        listaArticulos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                titulo = "Actualizar";
+                detalles((Integer) ids.get(position),titulo);
 
             }
-        }else{
-            for(int i = 0;i<ids.size();i++) {
-                final int posicion = i;
-                TableRow tableRow = new TableRow(getApplicationContext());
-                tabla.addView(tableRow);
-                for (int j = 0; j < columnasUsuario2.length; j++) {
-
-                    txtId= new TextView(getApplicationContext());
-                    txtNombre= new TextView(getApplicationContext());
-                    txtPrecio= new TextView(getApplicationContext());
-
-
-
-                    txtNombre.setGravity(Gravity.CENTER_VERTICAL);
-                    txtNombre.setPadding(15, 15, 15, 15);
-                    txtPrecio.setGravity(Gravity.CENTER_VERTICAL);
-                    txtPrecio.setPadding(15, 15, 15, 15);
-                    switch (j) {
-                        case 0:
-                            txtId.setText(ids.get(i).toString());
-                            System.out.println(ids.get(i));
-                            tableRow.addView(txtId);
-                            break;
-                        case 1:
-                            txtNombre.setText(nombres.get(i).toString());
-                            System.out.println(nombres.get(i));
-                            tableRow.addView(txtNombre);
-                            break;
-                        case 2:
-                            txtPrecio.setText(precios.get(i).toString());
-                            System.out.println(precios.get(i));
-                            tableRow.addView(txtPrecio);
-                            break;
-                        case 3:
-                            btnDetalles = new Button(getApplicationContext());
-                            btnDetalles.setText("Ver detalles");
-                            btnDetalles.setGravity(Gravity.CENTER_VERTICAL);
-
-                            btnDetalles.setCompoundDrawablesWithIntrinsicBounds(R.drawable.pen,0,0,0);
-                            btnDetalles.setPadding(15, 15, 15, 15);
-                            btnDetalles.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    System.out.println("holi");
-                                    detalles(Integer.parseInt(ids.get(posicion).toString()));
-                                }
-                            });
-                            tableRow.addView(btnDetalles);
-
-                            break;
-
-                    }
-                }
-
-            }
-        }
+        });
     }
-    public void detalles(int posicion){
+    public void detalles(int posicion,String titulo){
         Bundle bundle = new Bundle();
         Intent intent = new Intent(ListaActivity.this,DetallesActivity.class);
         bundle.putString("token", token);
+        bundle.putString("titulo", titulo);
         bundle.putInt("posicion", posicion);
         intent.putExtras(bundle);
         startActivity(intent);
     }
+    public void vistaRegistro(String titulo){
+        Bundle bundle = new Bundle();
+        Intent intent = new Intent(ListaActivity.this,DetallesActivity.class);
+        bundle.putString("token", token);
+        bundle.putString("titulo", titulo);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
 }

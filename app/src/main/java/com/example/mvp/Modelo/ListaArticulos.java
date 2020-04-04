@@ -5,6 +5,7 @@ import com.example.mvp.Vista.ListaVista;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,6 +54,14 @@ public class ListaArticulos implements ListaPresentador {
             }
         });
     }
+
+    @Override
+    public void metodoEliminarArticulo(String token, int id) {
+
+    }
+
+
+
     public ListaArticulos(ListaVista vistaLista){
         this.vistaLista =vistaLista;
 

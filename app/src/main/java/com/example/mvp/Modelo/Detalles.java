@@ -5,6 +5,7 @@ import com.example.mvp.Vista.DetallesVista;
 import com.example.mvp.Vista.ListaVista;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,7 +17,9 @@ public class Detalles implements DetallesPresentador {
     DetallesVista vistaDetalles;
     AsyncHttpClient client = new AsyncHttpClient();
     String descripcion;
-    String logo;
+    String nombre;
+    String precio;
+    String tipo;
     int distribuidora;
     String create;
 public Detalles(DetallesVista vistaDetalles){
@@ -34,19 +37,54 @@ public Detalles(DetallesVista vistaDetalles){
                 try {
 
                     JSONObject json = new JSONObject(new String(responseBody));
+                    nombre = json.getString("nombreProducto");
+                    tipo = json.getString("tipoProducto");
                     descripcion=json.getString("descripcion");
-                    logo = json.getString("logo");
-                    create = json.getString("create");
-                    distribuidora=json.getInt("distribuidora");
+                    precio = json.getString("precio");
+                    System.out.println("este es el nombre "+nombre);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                vistaDetalles.detalleArticulo(descripcion,logo,distribuidora,create);
+                vistaDetalles.detalleArticulo(nombre,descripcion,precio,tipo);
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
 
+            }
+        });
+    }
+
+    @Override
+    public void updateArticulo(String token, int id, RequestParams parametros) {
+        Conexion conexion = new Conexion();
+        client.addHeader("Authorization","Token"+" "+ token);
+        client.put(conexion.getRuta() + "/producto/productosEmpresa/action/" + id, parametros, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                vistaDetalles.registroOActualizacionExitosa();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                vistaDetalles.error();
+            }
+        });
+    }
+
+    @Override
+    public void metodoAgregarArticulo(String token, RequestParams parametros) {
+        Conexion conexion = new Conexion();
+        client.addHeader("Authorization","Token"+" "+ token);
+        client.post(conexion.getRuta() + "/producto/productosEmpresa/", parametros, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                vistaDetalles.registroOActualizacionExitosa();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    vistaDetalles.error();
             }
         });
     }
