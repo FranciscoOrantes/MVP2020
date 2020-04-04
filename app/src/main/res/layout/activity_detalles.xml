@@ -28,9 +28,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="84dp"
         android:layout_marginTop="16dp"
-        android:fontFamily="sans-serif-black"
-        android:text="Registrar Articulo"
+        android:fontFamily="sans-serif"
+        android:text="Registrar Artículo"
         android:textSize="30sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -52,7 +53,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
         android:layout_marginTop="24dp"
+        android:fontFamily="sans-serif-light"
         android:text="Nombre del artículo"
+        android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtTitulo" />
 
@@ -62,6 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
         android:layout_marginTop="16dp"
+        android:fontFamily="sans-serif-light"
         android:text="Precio"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtNombre" />
@@ -84,6 +88,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
         android:layout_marginTop="16dp"
+        android:fontFamily="sans-serif-light"
         android:text="Descripcion"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtPrecio" />
@@ -106,6 +111,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
         android:layout_marginTop="16dp"
+        android:fontFamily="sans-serif-light"
         android:text="Tipo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtDescripcion" />
